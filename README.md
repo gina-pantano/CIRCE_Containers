@@ -614,7 +614,7 @@ docker build --progress=plain -t vasp_image /home/gmpantano/mythings/docker/vasp
   - `--bind /dev/shm:/dev/shm` — Makes the host's shared-memory filesystem available inside the container. MPI and other parallel libraries may use `/dev/shm` for fast communication between processes running on the same compute node.
   - `bash -lc` — Starts a Bash shell inside the container. Here, `-l` starts a login shell and `-c` executes the command string that follows.
   - `source /opt/intel/oneapi/setvars.sh --force` — Initializes the Intel oneAPI environment inside the container, setting variables and paths such as `PATH`, `LD_LIBRARY_PATH`, `MKLROOT`, compiler paths, and MPI paths so the required Intel libraries can be found at runtime.
-  - `>/dev/null 2>&1` — Suppresses the normal and error output from the oneAPI initialization command, which keeps the Slurm output file cleaner.s such as: PATH, LD_LIBRARY_PATH, MKLROOT, etc. " >/dev/null 2>&1" just makes slurm output file cleaner.
+  - `>/dev/null 2>&1` — Suppresses the normal and error output from the oneAPI initialization command, which keeps the Slurm output file cleaner.
 
 ---
 
