@@ -207,7 +207,7 @@ https://hub.docker.com/search
 When a command such as
 
 ```bash
-docker build -t testimage /home/gmpantano/mythings/docker
+docker build -t vasp_image /home/gmpantano/mythings/docker/vasp
 ```
 
 is run, the final directory is the **Docker build context**. Files required by `COPY` instructions must be inside that context.
@@ -239,13 +239,13 @@ Adapt the username as needed and use your normal password for IRIS.
 From the repository root:
 
 ```bash
-docker build -t /home/gmpantano/mythings/testimage /home/gmpantano/mythings/docker/vasp
+docker build -t vasp_image /home/gmpantano/mythings/docker/vasp
 ```
 
 To keep a complete build record (have not tested myself):
 
 ```bash
-docker build --progress=plain -t /home/gmpantano/mythings/testimage /home/gmpantano/mythings/docker/vasp 2>&1 \
+docker build --progress=plain -t vasp_image /home/gmpantano/mythings/docker/vasp 2>&1 \
     | tee logs/vasp_docker_build.log
 ```
 
@@ -262,7 +262,7 @@ docker images
 Save the completed Docker image as a transferable archive:
 
 ```bash
-docker save -o /home/gmpantano/mythings/image.tar testimage:latest
+docker save -o /home/gmpantano/mythings/docker/image.tar vasp_image:latest
 ```
 
 > **Important:** Do not save `image.tar` inside the Docker build directory. The archive can be many gigabytes and keeping it inside the build context can lead to complications if the image needs rebuilt.
@@ -272,7 +272,7 @@ docker save -o /home/gmpantano/mythings/image.tar testimage:latest
 Example:
 
 ```bash
-rsync -avP /home/gmpantano/mythings/image.tar USER@CIRCE:/destination/path/
+rsync -avP /home/gmpantano/mythings/docker/image.tar USER@CIRCE:/destination/path/
 ```
 
 `-P` shows transfer progress and preserves a partially transferred file if the connection is interrupted.
@@ -283,7 +283,7 @@ On CIRCE:
 
 ```bash
 module load apps/apptainer/1.3.5
-apptainer build image.sif docker-archive://image.tar
+apptainer build /path/where/you/want/image.sif docker-archive:///path/to/image.tar
 ```
 
 The generated `image.sif` is the image used for compilation and running jobs.
