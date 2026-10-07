@@ -19,8 +19,10 @@ CIRCE_Container_Guide_Repository/
 │   ├── vasp/
 │   │   ├── Dockerfile
 │   │   └── wannier90_make.inc
+│   │   └── image.sif
 │   └── wannier90/
 │       └── Dockerfile
+│   │   └── image.sif
 ├── configs/
 │   └── vasp/
 │       └── makefile.include
