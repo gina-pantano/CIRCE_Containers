@@ -153,7 +153,7 @@ uname -m
 - `arm64` = Apple silicon
 - `x86_64` = Intel Mac
 
-For Apple silicon, explicitly build an AMD64 Linux image when the target HPC system is x86-64:
+For Apple silicon, explicitly build an AMD64 Linux image when the target HPC system is x86-64 such as:
 
 ```bash
 docker build --platform linux/amd64 -t myimage .
@@ -212,7 +212,7 @@ docker build -t testimage /home/gmpantano/mythings/docker
 
 is run, the final directory is the **Docker build context**. Files required by `COPY` instructions must be inside that context.
 
-For the VASP image in this repository, the build directory should contain: https://vasp.at/wiki/Makefile.include<img width="468" height="25" alt="image" src="https://github.com/user-attachments/assets/549b96fe-afff-4725-8b65-fa9565dbcfa5" />
+For the VASP image in this repository, the build directory should contain:
 
 ```text
 docker/vasp/
@@ -220,32 +220,32 @@ docker/vasp/
 └── wannier90_make.inc
 ```
 
-The serial Wannier90 library built in the VASP image is used for VASP-to-Wannier90 support. See documentation for reference: 
+The serial Wannier90 library built in the VASP image is used for VASP-to-Wannier90 support. See documentation for reference: https://vasp.at/wiki/Makefile.include
 
 ---
 
 # 3. Build, export, transfer, and convert the image
 
-For the QCG workflow, connect to the group Docker host before running Docker commands:
+For QCG members, connect to the Docker node before running Docker commands:
 
 ```bash
 ssh gmpantano@qcg-docker
 ```
 
-Adapt the username as needed.
+Adapt the username as needed and use your normal password for IRIS.
 
 ## Build the VASP environment image
 
 From the repository root:
 
 ```bash
-docker build -t testimage ./docker/vasp
+docker build -t /home/gmpantano/mythings/testimage /home/gmpantano/mythings/docker/vasp
 ```
 
-To keep a complete build record:
+To keep a complete build record (have not tested myself):
 
 ```bash
-docker build --progress=plain -t testimage ./docker/vasp 2>&1 \
+docker build --progress=plain -t /home/gmpantano/mythings/testimage /home/gmpantano/mythings/docker/vasp 2>&1 \
     | tee logs/vasp_docker_build.log
 ```
 
@@ -265,7 +265,7 @@ Save the completed Docker image as a transferable archive:
 docker save -o /home/gmpantano/mythings/image.tar testimage:latest
 ```
 
-> **Important:** Do not save `image.tar` inside the Docker build directory. The archive can be many gigabytes, and keeping it inside the build context can make later Docker builds unnecessarily large or slow.
+> **Important:** Do not save `image.tar` inside the Docker build directory. The archive can be many gigabytes and keeping it inside the build context can lead to complications if the image needs rebuilt.
 
 ## Transfer to CIRCE
 
@@ -282,11 +282,11 @@ rsync -avP /home/gmpantano/mythings/image.tar USER@CIRCE:/destination/path/
 On CIRCE:
 
 ```bash
-module load apptainer/1.4.4
+module load apps/apptainer/1.3.5
 apptainer build image.sif docker-archive://image.tar
 ```
 
-The generated `image.sif` is the image used for compilation and production jobs.
+The generated `image.sif` is the image used for compilation and running jobs.
 
 ## Test the container interactively
 
@@ -320,7 +320,7 @@ A reusable example is provided at:
 
 ## Obtain the VASP source
 
-Download the licensed source from the VASP Portal or another authorized source and place the archive in the directory where VASP will be compiled.
+Download the licensed source from the VASP portal or another authorized source and place the .tgz file in the directory where VASP will be compiled.
 
 Example:
 
@@ -405,7 +405,7 @@ Obtain VASP source
       ↓
 Extract archive
       ↓
-Add makefile.include
+Add and edit makefile.include
       ↓
 Compile inside image.sif
       ↓
@@ -464,7 +464,7 @@ make -j4
 make -j4 lib
 ```
 
-use four build jobs to accelerate **compilation**. `-j4` does not itself provide MPI parallelism.
+use four build jobs to accelerate compilation. `-j4` does not itself provide MPI parallelism.
 
 Submit the wrapper job:
 
@@ -582,25 +582,7 @@ If the environment must change:
 3. Export a new `image.tar`.
 4. Transfer the new archive to CIRCE.
 5. Regenerate `image.sif`.
-6. Re-run the test jobs.
-
-Do not try to maintain a container image by manually modifying the exported `.tar` or `.sif`.
-
----
-
-# Large files and Git
-
-Do **not** commit these to Git:
-
-```text
-image.tar
-image.sif
-VASP source archives
-compiled VASP source trees
-large Slurm output files
-```
-
-The included `.gitignore` excludes common generated artifacts.
+6. Re-run the test jobs with new `image.sif` file.
 
 ---
 
@@ -614,15 +596,6 @@ Capture a Docker build with:
 docker build --progress=plain -t testimage ./docker/vasp 2>&1 \
     | tee logs/vasp_docker_build.log
 ```
-
-The uploaded Word guide states that the original VASP image build output was included with an earlier ZIP, but that actual log file was not present in the uploaded material available when this repository was generated. Therefore, it has **not been fabricated** here. Add the original build log at:
-
-```text
-logs/vasp_docker_build.log
-```
-
-when available.
-
 ---
 
 # Notes
