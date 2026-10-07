@@ -54,7 +54,7 @@ A runnable instance of an image. It bundles the application environment with the
 A read-only template used to create containers. Docker images are built from a `Dockerfile`.
 
 **Dockerfile**  
-A plain-text set of instructions describing how to build a Docker image.
+A plain text set of instructions describing how to build a Docker image.
 
 **Apptainer image (`.sif`)**  
 The container image format used on CIRCE.
@@ -70,32 +70,32 @@ Group/local machine
 Create Dockerfile
       │
       ▼
-docker build
+Docker build image
       │
       ▼
-Docker image
-      │
-      ▼
-docker save → image.tar
+Docker save → image.tar
       │
       ▼
 Transfer image.tar to CIRCE
       │
       ▼
-apptainer build → image.sif
+Apptainer build → image.sif
       │
       ▼
-Compile VASP/Wannier90 using image.sif
+Compile VASP/Wannier90 running image.sif and submitting compilation scripts
       │
       ▼
-Submit Slurm jobs
+Submit Slurm test jobs
+      │
+      ▼
+Working container!
 ```
 
 ---
 
 # 1. Install Docker
 
-Docker requires privileged/root-level capabilities that are normally unavailable to users on HPC systems. Therefore, **do not install Docker on CIRCE**. Install Docker on a group-controlled machine or local computer where you have administrator privileges.
+Docker requires privileged/root-level capabilities that are normally unavailable to users on HPC systems. Therefore, **do not install Docker on CIRCE**. Install Docker on a group controlled machine or local computer where you have administrator privileges.
 
 Official installation documentation:
 
@@ -212,7 +212,7 @@ docker build -t testimage /home/gmpantano/mythings/docker
 
 is run, the final directory is the **Docker build context**. Files required by `COPY` instructions must be inside that context.
 
-For the VASP image in this repository, the build directory should contain:
+For the VASP image in this repository, the build directory should contain: https://vasp.at/wiki/Makefile.include<img width="468" height="25" alt="image" src="https://github.com/user-attachments/assets/549b96fe-afff-4725-8b65-fa9565dbcfa5" />
 
 ```text
 docker/vasp/
@@ -220,7 +220,7 @@ docker/vasp/
 └── wannier90_make.inc
 ```
 
-The serial Wannier90 library built in the VASP image is used for VASP-to-Wannier90 support.
+The serial Wannier90 library built in the VASP image is used for VASP-to-Wannier90 support. See documentation for reference: 
 
 ---
 
