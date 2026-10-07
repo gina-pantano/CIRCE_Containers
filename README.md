@@ -12,7 +12,7 @@ Practical guide for creating a container to compile and run VASP and Wannier90 o
 ## Contents
 
 ```text
-CIRCE_Container_Guide_Repository/
+CIRCE_Containers/
 ├── README.md
 ├── .gitignore
 ├── docker/
