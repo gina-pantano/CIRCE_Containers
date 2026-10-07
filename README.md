@@ -226,7 +226,7 @@ The serial Wannier90 library built in the VASP image is used for VASP-to-Wannier
 
 # 3. Build, export, transfer, and convert the image
 
-For QCG members, connect to the Docker node before running Docker commands:
+For QCG members, connect to the Docker node while on IRIS before running Docker commands:
 
 ```bash
 ssh gmpantano@qcg-docker
