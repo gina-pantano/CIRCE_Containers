@@ -3,7 +3,7 @@
 The original Word guide refers to the output from the VASP Docker image build and the output file was uploaded under logs:
 
 ```text
-logs/vasp_docker_build.log
+logs/vasp_docker_build.docx
 ```
 
 For future builds, capture a complete plain text Docker build log with example command:
