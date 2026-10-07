@@ -82,7 +82,7 @@ Transfer image.tar to CIRCE
 Apptainer build → image.sif
       │
       ▼
-Compile VASP/Wannier90 running image.sif and submitting compilation scripts
+Compile VASP/Wannier90 running image.sif
       │
       ▼
 Submit Slurm test jobs
