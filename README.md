@@ -3,7 +3,7 @@ Practical guide for creating a container to compile and run VASP and Wannier90 o
 
 > **Repository scope**
 >
-> This repository documents the Docker → Apptainer → Slurm workflow used by the group. It also contains the Dockerfiles, compiler configuration files, and Slurm scripts from the technical appendices of the original Word guide.
+> This repository documents the Docker → Apptainer → Slurm workflow used by the Quantum Chiraltronics Group (QCG). It also contains the Dockerfiles, compiler configuration files, and Slurm scripts from the technical appendices of the original Word guide.
 >
 > VASP itself is **not** distributed here. Users must obtain the VASP source from their account on the portal login: https://vasp.at/sign_in/portal/
 
