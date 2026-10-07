@@ -356,7 +356,7 @@ The example compilation job is:
 
 [`scripts/vasp_compile.sh`](scripts/vasp_compile.sh)
 
-Submit it from the directory containing the VASP source and `image.sif`:
+Submit it from the directory containing the VASP source and `image.sif` or adjust file paths:
 
 ```bash
 sbatch scripts/vasp_compile.sh
