@@ -1,0 +1,66 @@
+CPP_OPTIONS = -DHOST=\"LinuxIFC\" \
+              -DMPI -DMPI_BLOCK=8000 -Duse_collective \
+              -DscaLAPACK \
+              -DCACHE_SIZE=4000 \
+              -Davoidalloc \
+              -Dvasp6 \
+              -Duse_bse_te \
+              -Dtbdyn \
+              -Dfock_dblbuf
+
+CPP         = fpp -f_com=no -free -w0 \
+              $*$(FUFFIX) $*$(SUFFIX) $(CPP_OPTIONS)
+
+FC          = mpiifx
+FCL         = mpiifx
+
+FREE        = -free -names lowercase
+FFLAGS      = -assume byterecl -w
+
+OFLAG       = -O2
+OFLAG_IN    = $(OFLAG)
+DEBUG       = -O0
+
+OBJECTS     = fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.o
+OBJECTS_O1 += fftw3d.o fftmpi.o fftmpiw.o
+OBJECTS_O2 += fft3dlib.o
+
+CPP_LIB     = $(CPP)
+FC_LIB      = $(FC)
+CC_LIB      = icx
+CFLAGS_LIB  = -O
+FFLAGS_LIB  = -O1
+FREE_LIB    = $(FREE)
+
+OBJECTS_LIB = linpack_double.o
+
+CXX_PARS    = icpx
+LLIBS       = -lstdc++
+
+VASP_TARGET_CPU ?= -xHOST
+FFLAGS          += $(VASP_TARGET_CPU)
+
+FCL += -qmkl=sequential
+
+LLIBS += -L$(MKLROOT)/lib/intel64 \
+          -lmkl_scalapack_lp64 \
+          -lmkl_blacs_intelmpi_lp64
+
+INCS += -I$(MKLROOT)/include/fftw
+
+CPP_OPTIONS += -DVASP_HDF5
+
+HDF5_ROOT ?= /usr/local
+
+LLIBS += -L$(HDF5_ROOT)/lib \
+          -lhdf5_fortran \
+          -lhdf5
+
+INCS += -I$(HDF5_ROOT)/include
+
+CPP_OPTIONS += -DVASP2WANNIER90
+
+WANNIER90_ROOT ?= /usr/local/wannier90
+
+LLIBS += -L$(WANNIER90_ROOT)/lib \
+          -lwannier
