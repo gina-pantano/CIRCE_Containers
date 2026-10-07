@@ -425,7 +425,7 @@ The standalone Wannier90 workflow uses a separate, MPI-enabled Wannier90 build.
 ## Build the Wannier90 Docker environment
 
 ```bash
-docker build -t wannier90-image ./docker/wannier90
+docker build -t wannier90-image /home/gmpantano/mythings/docker/wannier90
 ```
 
 Export and convert the image using the same Docker → `image.tar` → Apptainer procedure described above.
