@@ -593,7 +593,7 @@ A build log is valuable because it records the exact point at which a dependency
 Capture a Docker build with:
 
 ```bash
-docker build --progress=plain -t testimage ./docker/vasp 2>&1 \
+docker build --progress=plain -t vasp_image /home/gmpantano/mythings/docker/vasp 2>&1 \
     | tee logs/vasp_docker_build.log
 ```
 ---
@@ -609,7 +609,7 @@ docker build --progress=plain -t testimage ./docker/vasp 2>&1 \
 
 ## Original documentation
 
-The source Word guide is retained at:
+The source Word guide is located at:
 
 [`docs/ContainerNotes.docx`](docs/ContainerNotes.docx)
 
