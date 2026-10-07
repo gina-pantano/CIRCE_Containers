@@ -609,7 +609,7 @@ docker build --progress=plain -t vasp_image /home/gmpantano/mythings/docker/vasp
 
 ## Original documentation
 
-The source Word guide is located at:
+The Word guide is located at:
 
 [`docs/ContainerNotes.docx`](docs/ContainerNotes.docx)
 
