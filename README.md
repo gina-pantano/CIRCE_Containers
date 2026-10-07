@@ -604,7 +604,7 @@ docker build --progress=plain -t vasp_image /home/gmpantano/mythings/docker/vasp
 - Confirm the currently available CIRCE module versions with `module avail` before reproducing the workflow.
 - The standalone Wannier90 image and the VASP image serve different purposes: the VASP image contains the Wannier90 library used for VASP linking, while the standalone Wannier90 workflow builds an MPI-enabled `wannier90.x`.
 - The VASP source is licensed and is intentionally not included in this repository.
-- I had a lot of trial and error getting parallel VASP and Wannier90 jobs running correctly after compilation. The following commands are important for launching parallel jobs through Slurm and Apptainer:
+- I had a lot of trial and error getting parallel VASP and Wannier90 jobs running correctly after compilation. The following commands are important for launching parallel jobs through Slurm and Apptainer that are included in the job scripts:
 
   - `set -e` — Stops the script immediately if a command fails.
   - `set -x` — Prints each command as Bash executes it, which is useful for debugging.
