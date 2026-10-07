@@ -43,7 +43,7 @@ CIRCE_Containers/
 
 # Overview
 
-Docker packages an application and its dependencies into a reproducible software environment. For this workflow, Docker is used to **build the software environment**, while Apptainer is used to run that environment safely on CIRCE.
+Docker packages an application and its dependencies into a reproducible software environment. For this workflow, Docker is used to build the software environment, while Apptainer is used to run that environment safely on CIRCE.
 
 ### Key terms
 
