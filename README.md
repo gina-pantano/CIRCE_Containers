@@ -604,6 +604,103 @@ docker build --progress=plain -t vasp_image /home/gmpantano/mythings/docker/vasp
 - Confirm the currently available CIRCE module versions with `module avail` before reproducing the workflow.
 - The standalone Wannier90 image and the VASP image serve different purposes: the VASP image contains the Wannier90 library used for VASP linking, while the standalone Wannier90 workflow builds an MPI-enabled `wannier90.x`.
 - The VASP source is licensed and is intentionally not included in this repository.
+- I had a lot of trial and error to get parallel jobs running after compiling the VASP and Wannier90 software. These commands in the job script are necessary for the following reasons:
+#!/bin/bash -l
+set -e = Stop the script immediately if a command fails.
+
+set -x = Print each command as Bash executes it. Useful for debugging
+# This is useful for debugging the Slurm output file.
+
+srun --mpi=pmi2 \
+# srun tells Slurm to launch the parallel processes using the resources
+# allocated to the job.
+#
+# --mpi=pmi2 tells Slurm which process-management interface to use
+# to initialize and coordinate the MPI ranks.
+
+    apptainer exec \
+# Execute the following command inside the Apptainer .sif container.
+
+    --bind /work:/work \
+# Make the host cluster's /work filesystem visible inside the container
+# at the same path, /work.
+#
+# This is needed when executables, input files, or calculation directories
+# are stored under /work.
+
+    --bind /dev/shm:/dev/shm \
+# Make the host's shared-memory filesystem available inside the container.
+#
+# MPI and other parallel libraries may use /dev/shm for fast communication
+# between processes running on the same compute node.
+
+    "$IMAGE" \
+# Path to the Apptainer .sif image containing the software environment.
+
+    bash -lc "
+# Start another Bash shell inside the container.
+#
+# -l = start Bash as a login shell.
+# -c = execute the command string that follows.
+#
+# The execution layers are:
+#
+# #!/bin/bash -l
+#       |
+#       | host / CIRCE shell
+#       v
+# Slurm job script
+#       |
+#       v
+# srun
+#       |
+#       v
+# Apptainer
+#       |
+#       v
+# bash -lc
+#       |
+#       | container shell
+#       v
+# Intel oneAPI environment
+#       |
+#       v
+# VASP / Wannier90
+
+        source /opt/intel/oneapi/setvars.sh --force >/dev/null 2>&1
+# Initialize the Intel oneAPI environment inside the container.
+#
+# This sets variables and paths such as:
+#   PATH
+#   LD_LIBRARY_PATH
+#   MKLROOT
+#   compiler paths
+#   MPI paths
+#
+# These settings allow the executable to find the Intel MPI, MKL,
+# and compiler runtime libraries that were used when the software
+# was compiled.
+#
+# >/dev/null discards normal output from setvars.sh.
+# 2>&1 sends error output to the same location as standard output.
+# Together, these keep the Slurm output file cleaner.
+
+        export OMP_NUM_THREADS=1
+# Limit each MPI rank to one OpenMP thread.
+# This helps prevent CPU oversubscription.
+
+        export MKL_NUM_THREADS=1
+# Limit Intel MKL to one thread per MPI rank.
+# This also helps prevent CPU oversubscription.
+
+        exec '$VASP'
+# Replace the Bash process with the VASP executable.
+# This gives cleaner process handling under Slurm.
+#
+# For Wannier90, this would instead point to the wannier90.x executable.
+
+    " > result.out
+# Redirect the program's standard output to result.out.
 
 ---
 
