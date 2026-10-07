@@ -249,7 +249,7 @@ docker build --progress=plain -t vasp_image /home/gmpantano/mythings/docker/vasp
     | tee logs/vasp_docker_build.log
 ```
 
-See [`logs/README.md`](logs/README.md) for the expected build-log location.
+See [`logs/README.md`](logs/README.md) for more information and output from us building the VASP image.
 
 ## List local images
 
